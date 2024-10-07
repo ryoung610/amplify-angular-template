@@ -3,20 +3,27 @@ backend:
   phases:
     build:
       commands:
-        - npm ci --cache .npm --prefer-offline
+        - nvm install 18.19.1  # Install Node.js v18.19.1
+        - nvm use 18.19.1  # Use the correct version of Node.js
+        - npm ci --cache .npm --prefer-offline  # Install dependencies
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
+    preBuild:
+      commands:
+        - nvm install 18.19.1  # Install Node.js v18.19.1
+        - nvm use 18.19.1  # Ensure frontend uses the correct Node.js version
     build:
       commands:
-        - npm install -g @angular/cli
-        - ng version
-        - ng build --configuration=production
+        - npm install -g @angular/cli  # Install Angular CLI globally
+        - ng version  # Check Angular version
+        - ng build --configuration=production  # Build Angular project in production mode
   artifacts:
-    baseDirectory: dist/amplify-angular-template/browser
+    baseDirectory: dist/amplify-angular-template/browser  # Update base directory if needed
     files:
       - '**/*'
   cache:
     paths:
       - .npm/**/*
       - node_modules/**/*
+
